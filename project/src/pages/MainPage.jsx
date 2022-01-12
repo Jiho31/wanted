@@ -5,7 +5,6 @@ const MainPage = () => {
   return (
     <main>
       <NavBar />
-      <div>main pageeeee</div>
     </main>
   );
 };
