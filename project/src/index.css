@@ -23,3 +23,6 @@ body {
   border: 0;
   font: inherit;
 }
+a {
+  text-decoration: none;
+}
