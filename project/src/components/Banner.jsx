@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
 import img1 from "../assets/images/banner1.jpg";
@@ -89,14 +89,15 @@ const StyledBanner = styled.div`
   margin-top: 25px;
 `;
 const CarouselWrapper = styled.div`
-  width: calc(100vw * 11);
+  width: 100vw;
   display: flex;
-  // overflow: hidden;
+  overflow: hidden;
 `;
 const Carousel = styled.div`
-  width: auto;
+  // width: calc(100vw * 11);
+  width: 100vw;
   height: auto;
-  display: inline-flexß;
+  display: inline-flex;
 `;
 const CarouselContent = styled.article`
   width: 1060px;
@@ -107,12 +108,6 @@ const CarouselContent = styled.article`
     border-radius: 4px;
   }
 `;
-
-const PrevArrow = styled.span``;
-const NextArrow = styled.span`
-  right: 0;
-  top: 40%;
-`;
 const BannerArrow = styled.button`
   width: 30px;
   height: 60px;
@@ -120,7 +115,7 @@ const BannerArrow = styled.button`
   background-color: #fff;
   opacity: 0.5;
   font-size: 16px;
-
+  cursor: pointer;
   position: absolute;
   top: 120px;
 
@@ -128,13 +123,20 @@ const BannerArrow = styled.button`
     width: 16px;
     height: 16px;
   }
-
-  ${PrevArrow} {
-    left: calc((100% - 1210px) / 2);
-  }
+  ${(props) =>
+    props.prev &&
+    `
+  left: calc((100% - 1210px) / 2);
+  `}
+  ${(props) =>
+    props.next &&
+    `
+  right: calc((100% - 1200px) / 2);
+  
+  `}
 `;
 
-const BannerInfoBox = styled.div`
+const ContentInfo = styled.div`
   width: 330px;
   height: 146px;
   background-color: #fff;
@@ -142,6 +144,14 @@ const BannerInfoBox = styled.div`
   position: absolute;
   bottom: 28px;
   left: 34px;
+  opacity: 0;
+  ${(props) =>
+    props.visible &&
+    `
+    opacity: 1;
+    animation: 0.4s ease-in-out;
+  `}
+
   h2 {
     font-size: 20px;
     font-weight: 700;
@@ -185,17 +195,59 @@ const InfoLink = styled.a`
 
 // Banner 컴포넌트
 const Banner = () => {
+  const TOTAL_SLIDES = 11;
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const sliderRef = useRef(null);
+  const infoRef = useRef(null);
+
+  const nextSlide = () => {
+    if (currentSlide >= TOTAL_SLIDES) {
+      // 11 번째 슬라이드 이미지일 경우
+      // transition으로 다시 0 번째 슬라이드 이미지로 대체해서 보여주기
+      // setCurrentSlide(1);
+      return;
+    } else {
+      setCurrentSlide((prev) => prev + 1);
+    }
+  };
+  const prevSlide = () => {
+    if (currentSlide === 1) {
+      // 첫 번째 슬라이드 이미지일 경우
+      // transition으로 마지막 슬라이드 이미지로 대체해서 보여주기
+      // setCurrentSlide(TOTAL_SLIDES);
+      return;
+    } else {
+      setCurrentSlide((prev) => prev - 1);
+    }
+  };
+
+  useEffect(() => {
+    console.log(`현재 슬라이드 인덱스: ${currentSlide}`);
+
+    // 배너 이미지 슬라이드
+    sliderRef.current.style.transition = "all 0.4s ease-out";
+    // sliderRef.current.style.transform = `translateX(-${currentSlide - 1}00%)`;
+    sliderRef.current.style.transform = `translateX(-${
+      (currentSlide - 1) * 1084
+    }px)`;
+
+    // 배너 설명 컴포넌트 보이고 숨기기
+    infoRef.current.style.animation = "0.4s ease-in-out";
+    infoRef.current.style.opacity = 1;
+    // infoRef.current.classList.add("visible");
+  }, [currentSlide]);
+
   return (
     <StyledBanner>
       <CarouselWrapper>
-        <Carousel>
+        <Carousel ref={sliderRef}>
           {bannerData.map((data) => {
             const altText = `image${data.id}`;
 
             return (
               <CarouselContent>
                 <img src={data.image} alt={altText} />
-                <BannerInfoBox>
+                <ContentInfo ref={infoRef}>
                   <h2>{data.title}</h2>
                   <h3>{data.subtitle}</h3>
                   <hr />
@@ -207,24 +259,24 @@ const Banner = () => {
                       </svg>
                     </InfoLink>
                   </div>
-                </BannerInfoBox>
+                </ContentInfo>
               </CarouselContent>
             );
           })}
         </Carousel>
-        <BannerArrow>
-          <PrevArrow>
+        <BannerArrow onClick={prevSlide} prev>
+          <span>
             <svg viewBox="0 0 16 16">
               <path d="m6.045 9 5.978-5.977a.563.563 0 1 0-.796-.796L4.852 8.602a.562.562 0 0 0 0 .796l6.375 6.375a.563.563 0 0 0 .796-.796L6.045 9z"></path>
             </svg>
-          </PrevArrow>
+          </span>
         </BannerArrow>
-        <BannerArrow>
-          <NextArrow>
+        <BannerArrow onClick={nextSlide} next>
+          <span>
             <svg viewBox="0 0 16 16">
               <path d="m11.955 9-5.978 5.977a.563.563 0 0 0 .796.796l6.375-6.375a.563.563 0 0 0 0-.796L6.773 2.227a.562.562 0 1 0-.796.796L11.955 9z"></path>
             </svg>
-          </NextArrow>
+          </span>
         </BannerArrow>
       </CarouselWrapper>
     </StyledBanner>
