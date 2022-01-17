@@ -26,6 +26,7 @@ const Content = styled.article`
   width: 1060px;
   padding: 0 12px;
   box-sizing: content-box;
+  position: relative;
 
   img {
     border-radius: 4px;
@@ -39,13 +40,7 @@ const ContentInfo = styled.div`
   position: absolute;
   bottom: 28px;
   left: 34px;
-  opacity: 0;
-  ${(props) =>
-    props.visible &&
-    `
-    opacity: 1;
-    animation: 0.4s ease-in-out;
-  `}
+  opacity: 1;
 
   h2 {
     font-size: 20px;
