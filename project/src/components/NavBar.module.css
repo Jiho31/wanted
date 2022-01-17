@@ -62,6 +62,8 @@ a {
 .corp-service-button {
   cursor: pointer;
   font-size: 14px;
+  display: flex;
+  align-items: center;
 }
 .login-button {
   height: 100%;

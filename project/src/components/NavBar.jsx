@@ -2,6 +2,13 @@ import React from "react";
 import classes from "./NavBar.module.css";
 import styled from "styled-components";
 
+const MainLogo = styled.a`
+  display: block;
+  img {
+    width: 74px;
+    height: 20px;
+  }
+`;
 const Divider = styled.div`
   content: "";
   display: block;
@@ -37,13 +44,9 @@ const NavBar = () => {
               marginLeft: "15px",
             }}
           >
-            <a href="#">
-              <img
-                src="img/wanted-logo.png"
-                alt="wanted logo"
-                style={{ width: "74px", height: "19px" }}
-              />
-            </a>
+            <MainLogo href="#">
+              <img src="img/wanted-logo.png" alt="wanted logo" />
+            </MainLogo>
           </div>
         </div>
         <div className={classes["nav-center"]}>
