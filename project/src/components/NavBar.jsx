@@ -1,5 +1,23 @@
 import React from "react";
 import classes from "./NavBar.module.css";
+import styled from "styled-components";
+
+const MainLogo = styled.a`
+  display: block;
+  img {
+    width: 74px;
+    height: 20px;
+  }
+`;
+const Divider = styled.div`
+  content: "";
+  display: block;
+  width: 1px;
+  height: 10px;
+  background-color: #e1e2e3;
+  margin: auto 10px;
+  padding: 0;
+`;
 
 const NavBar = () => {
   return (
@@ -26,13 +44,9 @@ const NavBar = () => {
               marginLeft: "15px",
             }}
           >
-            <a href="#">
-              <img
-                src="img/wanted-logo.png"
-                alt="wanted logo"
-                style={{ width: "74px", height: "19px" }}
-              />
-            </a>
+            <MainLogo href="#">
+              <img src="img/wanted-logo.png" alt="wanted logo" />
+            </MainLogo>
           </div>
         </div>
         <div className={classes["nav-center"]}>
@@ -50,15 +64,19 @@ const NavBar = () => {
               <a href="#">이력서</a>
             </li>
             <li>
-              <a href="#">커뮤니티</a>
-              <div className={classes["menu-deco-text"]}>New</div>
+              <a href="#">
+                커뮤니티
+                <span className={classes["menu-deco-text"]}>New</span>
+              </a>
             </li>
             <li>
               <a href="#">프리랜서</a>
             </li>
             <li>
-              <a href="#">AI 합격예측</a>
-              <div className={classes["menu-deco-text"]}>Beta</div>
+              <a href="#">
+                AI 합격예측
+                <span className={classes["menu-deco-text"]}>Beta</span>
+              </a>
             </li>
           </ul>
         </div>
@@ -91,6 +109,7 @@ const NavBar = () => {
           <div>
             <button className={classes["login-button"]}>회원가입/로그인</button>
           </div>
+          <Divider />
           <div>
             <button className={classes["corp-service-button"]}>
               기업 서비스
