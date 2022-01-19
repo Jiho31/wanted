@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const NavBar = () => {
@@ -16,9 +16,6 @@ const NavBar = () => {
             <MainLogo href="#">
               <img src="img/wanted-logo.png" alt="wanted logo" />
             </MainLogo>
-          </div>
-          <div>
-            <RegisterButton>회원가입하기</RegisterButton>
           </div>
         </NavLeft>
         <NavCenter>
@@ -85,9 +82,57 @@ const NavBar = () => {
               </SearchButton>
             </li>
             <li>
-              <RegisterLoginButton>회원가입/로그인</RegisterLoginButton>
+              <NoticeButton>
+                <svg
+                  xmlns="https://www.w3.org/2000/svg"
+                  xlink="https://www.w3.org/1999/xlink"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                >
+                  <defs>
+                    <path
+                      id="bpnpn3yn0a"
+                      d="M7.554 14.813h3.183a1.689 1.689 0 01-3.183 0zm1.592 2.25a2.813 2.813 0 002.812-2.813.563.563 0 00-.562-.563h-7.5c-.31 0-.541-.014-.699-.04.018-.036.04-.077.066-.123.036-.065.354-.605.46-.8.477-.875.735-1.676.735-2.599V6.75c0-2.656 2.057-4.688 4.688-4.688 2.63 0 4.687 2.032 4.687 4.688v3.375c0 .923.258 1.724.736 2.6.106.194.424.734.46.799.026.046.047.087.065.123-.157.026-.389.04-.698.04a.564.564 0 000 1.126c1.263 0 1.896-.221 1.896-1.002 0-.26-.092-.494-.28-.833-.045-.083-.361-.619-.456-.792-.395-.724-.598-1.355-.598-2.061V6.75c0-3.28-2.563-5.813-5.812-5.813S3.333 3.47 3.333 6.75v3.375c0 .706-.203 1.337-.598 2.06-.094.174-.41.71-.456.793-.188.339-.279.572-.279.833 0 .78.632 1.002 1.896 1.002H6.39a2.813 2.813 0 002.756 2.25z"
+                    ></path>
+                  </defs>
+                  <g fill="none" fillRule="evenodd">
+                    <g transform="translate(-1079 -16) translate(224 7) translate(855 9)">
+                      <mask id="1dencd96ob" fill="#fff">
+                        <use href="#bpnpn3yn0a"></use>
+                      </mask>
+                      <use
+                        fillRule="nonzero"
+                        stroke="currentColor"
+                        stroke-width=".3"
+                        href="#bpnpn3yn0a"
+                      ></use>
+                      <g fill="currentColor" mask="url(#1dencd96ob)">
+                        <path d="M0 0H18V18H0z"></path>
+                      </g>
+                    </g>
+                  </g>
+                </svg>
+              </NoticeButton>
             </li>
-            <li>
+            <li style={{ display: "inline-flex" }}>
+              <UserButton>
+                <UserBorder>
+                  <UserImage></UserImage>
+                </UserBorder>
+              </UserButton>
+              <UserBadge style={{ position: "absolute" }}>
+                <svg width="5" height="5" viewBox="0 0 6 6">
+                  <g fill="#fff" fillRule="nonzero">
+                    <path
+                      d="M6.647 11L6.647 7.259 6.688 7.259 9.158 11 11 11 11 5 9.353 5 9.353 8.357 9.322 8.357 7.089 5 5 5 5 11z"
+                      transform="translate(-123 -375) translate(20 365) translate(98 5)"
+                    ></path>
+                  </g>
+                </svg>
+              </UserBadge>
+            </li>
+            <li style={{ padding: 0 }}>
               <Divider />
             </li>
             <li>
@@ -306,6 +351,10 @@ const NavRight = styled.div`
     flex-direction: row;
     align-items: center;
   }
+  li {
+    position: relative;
+    padding: 0 5px;
+  }
   button {
     cursor: pointer;
   }
@@ -324,10 +373,17 @@ const NavRight = styled.div`
       font-size: 13px;
     }
   }
+  @media (max-width: 1199px) {
+    ul > li:nth-child(3),
+    ul > li:nth-child(4),
+    ul > li:nth-child(5),
+    ul > li:nth-child(6) {
+      padding: 0;
+    }
+  }
 `;
 
 const SearchButton = styled.button`
-  padding: 0 5px;
   margin-top: 5px;
 `;
 const RegisterLoginButton = styled.button`
@@ -336,6 +392,54 @@ const RegisterLoginButton = styled.button`
   font-weight: 600;
   text-align: center;
 
+  @media (max-width: 991px) {
+    display: none;
+  }
+`;
+const NoticeButton = styled.button`
+  width: 18px;
+  height: 18px;
+  margin-top: 5px;
+`;
+const UserButton = styled.button`
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  @media (max-width: 991px) {
+    display: none;
+  }
+`;
+const UserBorder = styled.div`
+  border: 1px solid #e1e2e3;
+  border-radius: 50%;
+  background-color: #fff;
+  width: inherit;
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+const UserImage = styled.div`
+  background-image: url(https://static.wanted.co.kr/images/profile_default.png);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
+const UserBadge = styled.span`
+  width: 13px;
+  height: 13px;
+  background: #36f;
+  border-radius: 5px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  top: -2px;
+  left: 22px;
+  @media (min-width: 1199px) {
+    left: 32px;
+  }
   @media (max-width: 991px) {
     display: none;
   }
