@@ -109,7 +109,7 @@ const Banner = () => {
     if (currentSlideIdx > -1) {
       setCurrentSlideIdx((prev) => prev - 1);
     }
-  }, [currentSlideIdx, TOTAL_SLIDES]);
+  }, [currentSlideIdx]);
   const nextSlide = useCallback(() => {
     if (currentSlideIdx < TOTAL_SLIDES) {
       setCurrentSlideIdx((prev) => prev + 1);
