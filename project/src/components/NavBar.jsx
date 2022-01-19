@@ -102,7 +102,7 @@ const NavBar = () => {
                       id="a"
                     ></path>
                   </defs>
-                  <g fill="none" fill-rule="evenodd">
+                  <g fill="none" fillRule="evenodd">
                     <mask id="b" fill="#fff">
                       <use href="#a"></use>
                     </mask>
