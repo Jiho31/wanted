@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 
 const NavBar = () => {
@@ -386,6 +386,7 @@ const NavRight = styled.div`
 const SearchButton = styled.button`
   margin-top: 5px;
 `;
+/*
 const RegisterLoginButton = styled.button`
   height: 100%;
   font-size: 14px;
@@ -396,6 +397,7 @@ const RegisterLoginButton = styled.button`
     display: none;
   }
 `;
+*/
 const NoticeButton = styled.button`
   width: 18px;
   height: 18px;

@@ -97,7 +97,6 @@ const bannerData = [
 const Banner = () => {
   const TOTAL_SLIDES = bannerData.length - 4;
   const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
-  const [contentWidth, setContentWidth] = useState();
 
   const [transitionEnabled, setTransitionEnabled] = useState(true);
 
@@ -110,12 +109,12 @@ const Banner = () => {
     if (currentSlideIdx > -1) {
       setCurrentSlideIdx((prev) => prev - 1);
     }
-  }, [currentSlideIdx]);
+  }, [currentSlideIdx, TOTAL_SLIDES]);
   const nextSlide = useCallback(() => {
     if (currentSlideIdx < TOTAL_SLIDES) {
       setCurrentSlideIdx((prev) => prev + 1);
     }
-  }, [currentSlideIdx]);
+  }, [currentSlideIdx, TOTAL_SLIDES]);
 
   const transitionEndHandler = () => {
     if (currentSlideIdx === -1) {
@@ -219,10 +218,8 @@ const Carousel = styled.div`
   height: auto;
   display: inline-flex;
   transition: all 0s;
-  // transform: translateX(calc(2168px + 50vw));
   padding: 0 calc((100vw - 1060px) / 2);
 
-  // @media (min-width: 992px) and (max-width: 1199px) {
   @media (max-width: 1199px) {
     transform: translateX(calc(90.5vw * 2 + 50vw));
     padding: 0 calc((100vw - 90.5vw) / 2);

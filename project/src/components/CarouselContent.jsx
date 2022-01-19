@@ -88,7 +88,6 @@ const ContentInfo = styled.div`
       margin: 0 20px;
     }
   }
-  // @media (min-width: 992px) and (max-width: 1199px) {
   @media (max-width: 1199px) {
     width: 100%;
     position: relative;
