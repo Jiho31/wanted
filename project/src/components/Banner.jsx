@@ -28,7 +28,7 @@ const bannerData = [
   {
     id: 0,
     title: "마케팅 주니어를 찾습니다",
-    subtitle: "1월 17일(월) 설명회 신청하기",
+    subtitle: "기업 과제 풀고 취업까지 한번에!",
     image: img1,
   },
   {
@@ -93,6 +93,114 @@ const bannerData = [
   },
 ];
 
+// Banner 컴포넌트
+const Banner = () => {
+  const TOTAL_SLIDES = bannerData.length - 4;
+  const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
+  const [contentWidth, setContentWidth] = useState();
+
+  const [transitionEnabled, setTransitionEnabled] = useState(true);
+
+  const sliderRef = useRef(null);
+
+  // 스와이프 이벤트
+  let startX, endX;
+
+  const prevSlide = useCallback(() => {
+    if (currentSlideIdx > -1) {
+      setCurrentSlideIdx((prev) => prev - 1);
+    }
+  }, [currentSlideIdx]);
+  const nextSlide = useCallback(() => {
+    if (currentSlideIdx < TOTAL_SLIDES) {
+      setCurrentSlideIdx((prev) => prev + 1);
+    }
+  }, [currentSlideIdx]);
+
+  const transitionEndHandler = () => {
+    if (currentSlideIdx === -1) {
+      setTransitionEnabled(false);
+      setCurrentSlideIdx(TOTAL_SLIDES - 1);
+    } else if (currentSlideIdx === TOTAL_SLIDES) {
+      setTransitionEnabled(false);
+      setCurrentSlideIdx(0);
+    }
+  };
+
+  useEffect(() => {
+    // 배너 이미지 슬라이드
+    // sliderRef.current.style.transform = `translateX(-${currentSlideIdx - 1}00%)`;
+    if (window.innerWidth < 1200) {
+      sliderRef.current.style.transform = `translateX(-${
+        (currentSlideIdx + 2) * 90.5
+      }%)`;
+    } else {
+      sliderRef.current.style.transform = `translateX(-${
+        (currentSlideIdx + 2) * 1084
+      }px)`;
+    }
+
+    sliderRef.current.style.transition = !transitionEnabled
+      ? "none"
+      : "all 0.25s linear";
+  }, [currentSlideIdx, transitionEnabled]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (currentSlideIdx === TOTAL_SLIDES - 1 || currentSlideIdx === 0) {
+        setTransitionEnabled(true);
+      }
+    }, 100);
+  }, [currentSlideIdx]);
+
+  const mouseDownHandler = (e) => {
+    startX = e.clientX;
+    console.log(startX);
+  };
+  const mouseUpHandler = (e) => {
+    endX = e.clientX;
+    console.log(endX);
+    if (startX > endX) {
+      nextSlide();
+    } else {
+      prevSlide();
+    }
+  };
+
+  return (
+    <StyledBanner>
+      <CarouselWrapper>
+        <Carousel ref={sliderRef} onTransitionEnd={transitionEndHandler}>
+          {bannerData.map((data) => {
+            return (
+              <CarouselContent
+                data={data}
+                key={data.id}
+                onMouseDown={mouseDownHandler}
+                onMouseUp={mouseUpHandler}
+              />
+            );
+          })}
+        </Carousel>
+        <BannerArrow onClick={prevSlide} prev>
+          <span>
+            <svg viewBox="0 0 16 16">
+              <path d="m6.045 9 5.978-5.977a.563.563 0 1 0-.796-.796L4.852 8.602a.562.562 0 0 0 0 .796l6.375 6.375a.563.563 0 0 0 .796-.796L6.045 9z"></path>
+            </svg>
+          </span>
+        </BannerArrow>
+        <BannerArrow onClick={nextSlide} next>
+          <span>
+            <svg viewBox="0 0 16 16">
+              <path d="m11.955 9-5.978 5.977a.563.563 0 0 0 .796.796l6.375-6.375a.563.563 0 0 0 0-.796L6.773 2.227a.562.562 0 1 0-.796.796L11.955 9z"></path>
+            </svg>
+          </span>
+        </BannerArrow>
+      </CarouselWrapper>
+    </StyledBanner>
+  );
+};
+
 // styled components
 const StyledBanner = styled.div`
   height: auto;
@@ -102,17 +210,28 @@ const StyledBanner = styled.div`
 const CarouselWrapper = styled.div`
   width: 100%;
   display: flex;
-  overflow: hidden;
   position: relative;
+  overflow: hidden;
+  margin: 0 auto;
 `;
 const Carousel = styled.div`
-  // width: calc(100vw * 11);
   width: 100%;
   height: auto;
   display: inline-flex;
-  // transition: ${(props) => (props.enable ? "all 0.25s linear;" : "none")}
-  transition: all 0.25s linear;
-  transform: translateX(2168px);
+  transition: all 0s;
+  // transform: translateX(calc(2168px + 50vw));
+  padding: 0 calc((100vw - 1060px) / 2);
+
+  // @media (min-width: 992px) and (max-width: 1199px) {
+  @media (max-width: 1199px) {
+    transform: translateX(calc(90.5vw * 2 + 50vw));
+    padding: 0 calc((100vw - 90.5vw) / 2);
+    img {
+      width: inherit;
+      height: 183px;
+      object-fit: cover;
+    }
+  }
 `;
 
 const BannerArrow = styled.button`
@@ -141,91 +260,16 @@ const BannerArrow = styled.button`
   right: calc((100% - 1200px) / 2);
   
   `}
+  button {
+    color: #36f;
+    cursor: pointer;
+  }
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: #36f;
+    line-height: 1;
+  }
 `;
-
-// Banner 컴포넌트
-const Banner = () => {
-  const TOTAL_SLIDES = bannerData.length - 4;
-  const [currentSlideIdx, setCurrentSlideIdx] = useState(0);
-
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
-
-  const sliderRef = useRef(null);
-  const infoRef = useRef(null);
-
-  const prevSlide = useCallback(() => {
-    if (currentSlideIdx > -1) {
-      setCurrentSlideIdx((prev) => prev - 1);
-    }
-  }, [currentSlideIdx]);
-  const nextSlide = useCallback(() => {
-    if (currentSlideIdx < TOTAL_SLIDES) {
-      setCurrentSlideIdx((prev) => prev + 1);
-    }
-  }, [currentSlideIdx]);
-
-  const transitionEndHandler = () => {
-    if (currentSlideIdx === -1) {
-      setTransitionEnabled(false);
-      setCurrentSlideIdx(TOTAL_SLIDES - 1);
-    } else if (currentSlideIdx === TOTAL_SLIDES) {
-      setTransitionEnabled(false);
-      setCurrentSlideIdx(0);
-    }
-  };
-  useEffect(() => {
-    if (currentSlideIdx === TOTAL_SLIDES - 1 || currentSlideIdx === 0) {
-      setTransitionEnabled(true);
-    }
-  }, [currentSlideIdx]);
-
-  useEffect(() => {
-    console.log(`현재 슬라이드 인덱스: ${currentSlideIdx}`);
-
-    // 배너 이미지 슬라이드
-    // sliderRef.current.style.transform = `translateX(-${currentSlideIdx - 1}00%)`;
-    sliderRef.current.style.transform = `translateX(-${
-      (currentSlideIdx + 2) * 1084
-    }px)`;
-    sliderRef.current.style.transition = !transitionEnabled
-      ? "none"
-      : "all 0.25s linear";
-
-    // 배너 설명 컴포넌트 보이고 숨기기 <수정 필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!>
-    // infoRef.current.style.animation = "0.4s ease-in-out";
-    // infoRef.current.style.opacity = 1;
-    // infoRef.current.classList.add("visible");
-  }, [currentSlideIdx, transitionEnabled]);
-
-  return (
-    <StyledBanner>
-      <CarouselWrapper>
-        <Carousel
-          ref={sliderRef}
-          onTransitionEnd={transitionEndHandler}
-          enable={transitionEnabled}
-        >
-          {bannerData.map((data) => {
-            return <CarouselContent data={data} key={data.id} />;
-          })}
-        </Carousel>
-        <BannerArrow onClick={prevSlide} prev>
-          <span>
-            <svg viewBox="0 0 16 16">
-              <path d="m6.045 9 5.978-5.977a.563.563 0 1 0-.796-.796L4.852 8.602a.562.562 0 0 0 0 .796l6.375 6.375a.563.563 0 0 0 .796-.796L6.045 9z"></path>
-            </svg>
-          </span>
-        </BannerArrow>
-        <BannerArrow onClick={nextSlide} next>
-          <span>
-            <svg viewBox="0 0 16 16">
-              <path d="m11.955 9-5.978 5.977a.563.563 0 0 0 .796.796l6.375-6.375a.563.563 0 0 0 0-.796L6.773 2.227a.562.562 0 1 0-.796.796L11.955 9z"></path>
-            </svg>
-          </span>
-        </BannerArrow>
-      </CarouselWrapper>
-    </StyledBanner>
-  );
-};
 
 export default Banner;
